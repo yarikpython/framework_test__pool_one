@@ -12,7 +12,7 @@ path_chrome_exe = os.path.normpath(config.CHROMEDRIVER_EXE)
 def driver():
     chrome_options = Options()
     chrome_options.add_argument("start-maximized")
-    chrome_options.headless = True
+    # chrome_options.headless = True
     driver = webdriver.Chrome(executable_path=path_chrome_exe, options=chrome_options)
     driver.maximize_window()
     yield driver
