@@ -21,7 +21,7 @@ class MainPageLocators:
     NAV_TRANSLATE_LINK = (By.CSS_SELECTOR, '[data-id="translate"]')
     NAV_TRANSLATE_LINK_V2 = (By.XPATH, "//div[contains(text(), 'Переводчик')]")
     NAV_MUSIC_LINK = (By.CSS_SELECTOR, '[data-id="music"]')
-    NAV_MUSIC_LINK_V2 = (By.XPATH, "//div[contains(text(), 'Музыка')]")
+    NAV_MUSIC_LINK_V2 = (By.XPATH, "//div[@class='services-new__item-title'][ contains(text(), 'Музыка')]")
     LANG_LINK = (By.CSS_SELECTOR, '[title="Выбрать язык"]')
     LANG_MORE_LINK = (By.CSS_SELECTOR, '[data-statlog="head.lang.more"]')
 
