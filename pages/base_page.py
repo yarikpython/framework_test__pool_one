@@ -4,8 +4,10 @@ from .locators import BasePageLocators
 
 class BasePage:
 
-    def __init__(self, driver, url, timeout=10):
+    def __init__(self, driver, url=None, timeout=10):
         self.driver = driver
+        if url is None:
+            self.url = self.driver.current_url
         self.url = url
         self.driver.implicitly_wait(timeout)
 

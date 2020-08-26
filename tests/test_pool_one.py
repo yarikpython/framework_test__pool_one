@@ -14,12 +14,10 @@ def test_mail_correct_user(driver):
     main_page = MainPage(driver, url)
     main_page.open()
     main_page.go_to_mail()
-    mail_window = driver.window_handles[1]
-    driver.switch_to.window(mail_window)
-    auth_page = AuthPage(driver, driver.current_url)
+    auth_page = AuthPage(driver)
     auth_page.send_username('AutotestUser')
     auth_page.send_password('AutotestUser123')
-    yandex_mail_page = YandexMailPage(driver, driver.current_url)
+    yandex_mail_page = YandexMailPage(driver)
     username = yandex_mail_page.get_username()
     with allure.step('Screenshot'):
         allure.attach(driver.get_screenshot_as_png(), name='screenshot username', attachment_type=AttachmentType.PNG)
@@ -33,16 +31,14 @@ def test_logout(driver):
     main_page = MainPage(driver, url)
     main_page.open()
     main_page.go_to_mail()
-    mail_window = driver.window_handles[1]
-    driver.switch_to.window(mail_window)
-    auth_page = AuthPage(driver, driver.current_url)
+    auth_page = AuthPage(driver)
     auth_page.send_username('AutotestUser')
     auth_page.send_password('AutotestUser123')
-    yandex_mail_page = YandexMailPage(driver, driver.current_url)
+    yandex_mail_page = YandexMailPage(driver)
     username = yandex_mail_page.get_username()
     assert username == 'AutotestUser'
     yandex_mail_page.logout()
-    auth_page_after_logout = AuthPage(driver, driver.current_url)
+    auth_page_after_logout = AuthPage(driver)
     assert auth_page_after_logout.is_element_present(*AuthPageLocators.INPUT_PASSWORD)
 
 
@@ -53,14 +49,13 @@ def test_invalid_password(driver):
     main_page = MainPage(driver, url)
     main_page.open()
     main_page.go_to_mail()
-    mail_window = driver.window_handles[1]
-    driver.switch_to.window(mail_window)
-    auth_page = AuthPage(driver, driver.current_url)
+    auth_page = AuthPage(driver)
     auth_page.send_username('AutotestUser')
     auth_page.send_password('NoAutotestUser123')
     with allure.step('Screenshot'):
         allure.attach(driver.get_screenshot_as_png(), name='screenshot username', attachment_type=AttachmentType.PNG)
-    assert auth_page.is_element_present(*AuthPageLocators.PASSWORD_ERROR)
+    assert auth_page.is_element_present(*AuthPageLocators.PASSWORD_ERROR) or auth_page.is_element_present(
+        *AuthPageLocators.COMMON_AUTH_ERROR)
 
 
 @allure.feature('Yandex Mail Auth')
@@ -70,13 +65,12 @@ def test_invalid_login(driver):
     main_page = MainPage(driver, url)
     main_page.open()
     main_page.go_to_mail()
-    mail_window = driver.window_handles[1]
-    driver.switch_to.window(mail_window)
-    auth_page = AuthPage(driver, driver.current_url)
+    auth_page = AuthPage(driver)
     auth_page.send_username('NoAutotestUser')
     with allure.step('Screenshot'):
         allure.attach(driver.get_screenshot_as_png(), name='screenshot username', attachment_type=AttachmentType.PNG)
-    assert auth_page.is_element_present(*AuthPageLocators.LOGIN_ERROR)
+    assert auth_page.is_element_present(*AuthPageLocators.LOGIN_ERROR) or auth_page.is_element_present(
+        *AuthPageLocators.COMMON_AUTH_ERROR)
 
 
 @allure.feature("Yandex Main Links")
@@ -87,50 +81,36 @@ def test_nav_links(driver):
     main_window = driver.window_handles[0]
 
     main_page.go_to_video()
-    video_window = driver.window_handles[1]
-    driver.switch_to.window(video_window)
     assert 'video' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
 
     main_page.go_to_images()
-    image_window = driver.window_handles[1]
-    driver.switch_to.window(image_window)
     assert 'images' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
 
     main_page.go_to_news()
-    news_window = driver.window_handles[1]
-    driver.switch_to.window(news_window)
     assert 'news' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
 
     main_page.go_to_maps()
-    maps_window = driver.window_handles[1]
-    driver.switch_to.window(maps_window)
     assert 'maps' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
 
     main_page.go_to_market()
-    market_window = driver.window_handles[1]
-    driver.switch_to.window(market_window)
     assert 'market' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
 
     main_page.go_to_translate()
-    translate_window = driver.window_handles[1]
-    driver.switch_to.window(translate_window)
     assert 'translate' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
 
     main_page.go_to_music()
-    music_window = driver.window_handles[1]
-    driver.switch_to.window(music_window)
     assert 'music' in driver.current_url
     main_page.driver.close()
     driver.switch_to.window(main_window)
@@ -142,7 +122,7 @@ def test_change_lang(driver):
     main_page = MainPage(driver, url)
     main_page.open()
     main_page.go_to_lang_page()
-    lang_page = LangPage(driver, driver.current_url)
+    lang_page = LangPage(driver)
     lang_page.choice_lang_en()
     lang_page.save_changes()
     main_page.go_to_lang_page()
